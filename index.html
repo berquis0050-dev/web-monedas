@@ -167,6 +167,22 @@ update()
 }
 
 </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
+const firebaseConfig = {
+  apiKey: "TU_APIKEY",
+  authDomain: "coins-angel.firebaseapp.com",
+  projectId: "coins-angel",
+  storageBucket: "coins-angel.appspot.com",
+  messagingSenderId: "668480216982",
+  appId: "1:668480216982:web:XXXXXXXX",
+  measurementId: "G-GP919L844M"
+};
+
+const app = initializeApp(firebaseConfig);
+
+console.log("Firebase conectado 🔥");
+</script>
 </body>
 </html>
