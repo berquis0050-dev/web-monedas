@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Sistema de Monedas</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Coins App</title>
+
 <style>
+
 body{
-font-family: Arial;
 background:#0f172a;
+font-family:Arial;
 color:white;
 text-align:center;
+margin:0;
 }
 
-.box{
+header{
+background:#020617;
+padding:15px;
+font-size:22px;
+}
+
+.container{
+max-width:400px;
+margin:auto;
+margin-top:30px;
 background:#1e293b;
 padding:20px;
 border-radius:10px;
-width:300px;
-margin:auto;
-margin-top:100px;
+}
+
+input{
+padding:10px;
+width:80%;
+margin:5px;
+border-radius:5px;
+border:none;
 }
 
 button{
@@ -26,33 +47,224 @@ border:none;
 border-radius:5px;
 background:#22c55e;
 color:white;
-font-size:16px;
+font-size:15px;
 }
+
+.menu button{
+background:#2563eb;
+}
+
+.task{
+background:#334155;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="box">
+<header>💰 Coins PRO</header>
 
-<h2>Sistema de Monedas</h2>
+<div class="container" id="login">
 
-<p>Monedas: <span id="coins">0</span></p>
+<h3>Login</h3>
 
-<button onclick="ganar()">Ganar monedas</button>
+<input id="user" placeholder="Usuario">
+
+<br>
+
+<button onclick="login()">Entrar</button>
+
+</div>
+
+<div class="container" id="panel" style="display:none">
+
+<h3>Usuario: <span id="username"></span></h3>
+
+<h2>Monedas: <span id="coins">0</span></h2>
+
+<div class="menu">
+
+<button onclick="show('tasks')">Tareas</button>
+<button onclick="show('bonus')">Bonus</button>
+<button onclick="show('ranking')">Ranking</button>
+
+</div>
+
+<div id="tasks">
+
+<div class="task">
+Ver video
+<br>
+<button onclick="reward(10)">+10</button>
+</div>
+
+<div class="task">
+Seguir cuenta
+<br>
+<button onclick="reward(20)">+20</button>
+</div>
+
+<div class="task">
+Like video
+<br>
+<button onclick="reward(5)">+5</button>
+</div>
+
+</div>
+
+<div id="bonus" style="display:none">
+
+<h3>Bonus diario</h3>
+
+<button onclick="daily()">Reclamar +50</button>
+
+</div>
+
+<div id="ranking" style="display:none">
+
+<h3>Ranking</h3>
+
+<ul id="rank"></ul>
+
+</div>
+
+<br>
+
+<button onclick="logout()">Salir</button>
 
 </div>
 
 <script>
 
-let coins = 0
+let user=null
 
-function ganar(){
-coins++
-document.getElementById("coins").innerText = coins
+function login(){
+
+let u=document.getElementById("user").value
+
+if(!u)return alert("Escribe usuario")
+
+user=u
+
+localStorage.setItem("user",u)
+
+document.getElementById("login").style.display="none"
+document.getElementById("panel").style.display="block"
+
+document.getElementById("username").innerText=u
+
+load()
+
+}
+
+function load(){
+
+let coins=localStorage.getItem("coins_"+user)||0
+
+document.getElementById("coins").innerText=coins
+
+ranking()
+
+}
+
+function reward(n){
+
+let coins=localStorage.getItem("coins_"+user)||0
+
+coins=parseInt(coins)+n
+
+localStorage.setItem("coins_"+user,coins)
+
+document.getElementById("coins").innerText=coins
+
+ranking()
+
+}
+
+function daily(){
+
+let last=localStorage.getItem("daily_"+user)
+
+let today=new Date().toDateString()
+
+if(last==today) return alert("Ya reclamaste hoy")
+
+reward(50)
+
+localStorage.setItem("daily_"+user,today)
+
+}
+
+function show(id){
+
+document.getElementById("tasks").style.display="none"
+document.getElementById("bonus").style.display="none"
+document.getElementById("ranking").style.display="none"
+
+document.getElementById(id).style.display="block"
+
+}
+
+function logout(){
+
+localStorage.removeItem("user")
+
+location.reload()
+
+}
+
+function ranking(){
+
+let list=document.getElementById("rank")
+
+list.innerHTML=""
+
+for(let key in localStorage){
+
+if(key.startsWith("coins_")){
+
+let name=key.replace("coins_","")
+
+let coins=localStorage.getItem(key)
+
+let li=document.createElement("li")
+
+li.innerText=name+" : "+coins
+
+list.appendChild(li)
+
+}
+
+}
+
+}
+
+window.onload=()=>{
+
+let u=localStorage.getItem("user")
+
+if(u){
+
+user=u
+
+document.getElementById("login").style.display="none"
+document.getElementById("panel").style.display="block"
+
+document.getElementById("username").innerText=u
+
+load()
+
+}
+
 }
 
 </script>
 
 </body>
+
 </html>
