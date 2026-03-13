@@ -164,10 +164,40 @@ sorted.slice(0,5).forEach((r,i)=>{
 text += (i+1)+". "+r[0]+" - "+r[1]+" monedas\n";
 });
 
+
 alert(text);
 
 }
+adminPanel();
 
+}else{
+
+alert("Contraseña incorrecta");
+
+}
+
+}
+
+function adminPanel(){
+
+let opcion = prompt(
+"ADMIN PANEL\n\n1 Reset coins\n2 Ver ranking"
+);
+
+if(opcion == "1"){
+
+localStorage.clear();
+alert("Coins reseteadas");
+
+}
+
+if(opcion == "2"){
+
+alert(localStorage.getItem("ranking"));
+
+}
+
+  }
 </script>
 
 </body>
