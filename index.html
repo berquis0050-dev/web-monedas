@@ -1,64 +1,52 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Coins App</title>
+<title>Coins EMPERADOR</title>
 
 <style>
 
 body{
-background:#0f172a;
 font-family:Arial;
+background:#0f172a;
 color:white;
 text-align:center;
-margin:0;
 }
 
-header{
-background:#020617;
-padding:15px;
-font-size:22px;
-}
-
-.container{
-max-width:400px;
-margin:auto;
-margin-top:30px;
+.card{
 background:#1e293b;
-padding:20px;
-border-radius:10px;
+padding:25px;
+border-radius:15px;
+width:330px;
+margin:auto;
+margin-top:70px;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
 }
 
-input{
-padding:10px;
-width:80%;
-margin:5px;
-border-radius:5px;
-border:none;
+h1{
+font-size:40px;
 }
 
 button{
-padding:10px;
-margin:5px;
-border:none;
-border-radius:5px;
-background:#22c55e;
-color:white;
-font-size:15px;
-}
-
-.menu button{
 background:#2563eb;
+border:none;
+padding:12px;
+color:white;
+border-radius:8px;
+margin:6px;
+width:230px;
+font-size:16px;
 }
 
-.task{
-background:#334155;
-padding:10px;
-margin-top:10px;
-border-radius:6px;
+.green{
+background:#22c55e;
+}
+
+.gold{
+background:#f59e0b;
+}
+
+.red{
+background:#ef4444;
 }
 
 </style>
@@ -67,197 +55,112 @@ border-radius:6px;
 
 <body>
 
-<header>💰 Coins PRO</header>
+<div class="card">
 
-<div class="container" id="login">
+<h2>👑 Coins EMPERADOR</h2>
 
-<h3>Login</h3>
+<p id="user"></p>
 
-<input id="user" placeholder="Usuario">
+<h1 id="coins">0</h1>
 
-<br>
+<button onclick="video()">🎥 Ver video +10</button>
+<button onclick="follow()">👤 Seguir +20</button>
+<button onclick="like()">❤️ Like +5</button>
 
-<button onclick="login()">Entrar</button>
+<button class="green" onclick="bonus()">🎁 Bonus diario</button>
 
-</div>
+<button class="gold" onclick="ranking()">🏆 Ver ranking</button>
 
-<div class="container" id="panel" style="display:none">
-
-<h3>Usuario: <span id="username"></span></h3>
-
-<h2>Monedas: <span id="coins">0</span></h2>
-
-<div class="menu">
-
-<button onclick="show('tasks')">Tareas</button>
-<button onclick="show('bonus')">Bonus</button>
-<button onclick="show('ranking')">Ranking</button>
-
-</div>
-
-<div id="tasks">
-
-<div class="task">
-Ver video
-<br>
-<button onclick="reward(10)">+10</button>
-</div>
-
-<div class="task">
-Seguir cuenta
-<br>
-<button onclick="reward(20)">+20</button>
-</div>
-
-<div class="task">
-Like video
-<br>
-<button onclick="reward(5)">+5</button>
-</div>
-
-</div>
-
-<div id="bonus" style="display:none">
-
-<h3>Bonus diario</h3>
-
-<button onclick="daily()">Reclamar +50</button>
-
-</div>
-
-<div id="ranking" style="display:none">
-
-<h3>Ranking</h3>
-
-<ul id="rank"></ul>
-
-</div>
-
-<br>
-
-<button onclick="logout()">Salir</button>
+<button class="red" onclick="reset()">♻️ Reiniciar monedas</button>
 
 </div>
 
 <script>
 
-let user=null
+let username = localStorage.getItem("user")
 
-function login(){
+if(!username){
 
-let u=document.getElementById("user").value
+username = prompt("Escribe tu usuario")
 
-if(!u)return alert("Escribe usuario")
-
-user=u
-
-localStorage.setItem("user",u)
-
-document.getElementById("login").style.display="none"
-document.getElementById("panel").style.display="block"
-
-document.getElementById("username").innerText=u
-
-load()
+localStorage.setItem("user",username)
 
 }
 
-function load(){
+document.getElementById("user").innerText = "Usuario: " + username
 
-let coins=localStorage.getItem("coins_"+user)||0
+let coins = Number(localStorage.getItem("coins")) || 0
 
-document.getElementById("coins").innerText=coins
+function update(){
 
-ranking()
+localStorage.setItem("coins",coins)
 
-}
-
-function reward(n){
-
-let coins=localStorage.getItem("coins_"+user)||0
-
-coins=parseInt(coins)+n
-
-localStorage.setItem("coins_"+user,coins)
-
-document.getElementById("coins").innerText=coins
-
-ranking()
+document.getElementById("coins").innerText = coins
 
 }
 
-function daily(){
+update()
 
-let last=localStorage.getItem("daily_"+user)
+function video(){
 
-let today=new Date().toDateString()
-
-if(last==today) return alert("Ya reclamaste hoy")
-
-reward(50)
-
-localStorage.setItem("daily_"+user,today)
+coins += 10
+update()
+alert("+10 monedas")
 
 }
 
-function show(id){
+function follow(){
 
-document.getElementById("tasks").style.display="none"
-document.getElementById("bonus").style.display="none"
-document.getElementById("ranking").style.display="none"
-
-document.getElementById(id).style.display="block"
+coins += 20
+update()
+alert("+20 monedas")
 
 }
 
-function logout(){
+function like(){
 
-localStorage.removeItem("user")
+coins += 5
+update()
+alert("+5 monedas")
 
-location.reload()
+}
+
+function bonus(){
+
+let last = localStorage.getItem("bonus")
+
+let today = new Date().getDate()
+
+if(last == today){
+
+alert("Ya reclamaste el bonus hoy")
+
+}else{
+
+coins += 50
+
+localStorage.setItem("bonus",today)
+
+update()
+
+alert("Bonus +50")
+
+}
 
 }
 
 function ranking(){
 
-let list=document.getElementById("rank")
-
-list.innerHTML=""
-
-for(let key in localStorage){
-
-if(key.startsWith("coins_")){
-
-let name=key.replace("coins_","")
-
-let coins=localStorage.getItem(key)
-
-let li=document.createElement("li")
-
-li.innerText=name+" : "+coins
-
-list.appendChild(li)
+alert("👤 Usuario: "+username+" | 💰 Monedas: "+coins)
 
 }
 
-}
+function reset(){
 
-}
+if(confirm("¿Reiniciar monedas?")){
 
-window.onload=()=>{
-
-let u=localStorage.getItem("user")
-
-if(u){
-
-user=u
-
-document.getElementById("login").style.display="none"
-document.getElementById("panel").style.display="block"
-
-document.getElementById("username").innerText=u
-
-load()
+coins = 0
+update()
 
 }
 
@@ -266,5 +169,4 @@ load()
 </script>
 
 </body>
-
 </html>
