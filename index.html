@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sistema de Monedas</title>
+<style>
+body{
+font-family: Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+.box{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+width:300px;
+margin:auto;
+margin-top:100px;
+}
+
+button{
+padding:10px;
+margin:5px;
+border:none;
+border-radius:5px;
+background:#22c55e;
+color:white;
+font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Sistema de Monedas</h2>
+
+<p>Monedas: <span id="coins">0</span></p>
+
+<button onclick="ganar()">Ganar monedas</button>
+
+</div>
+
+<script>
+
+let coins = 0
+
+function ganar(){
+coins++
+document.getElementById("coins").innerText = coins
+}
+
+</script>
+
+</body>
+</html>
